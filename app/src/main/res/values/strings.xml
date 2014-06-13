@@ -4,5 +4,9 @@
     <string name="app_name">W</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_note_new">New Note</string>
+    <string name="action_note_save">Save Note</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="title_activity_edit">EditActivity</string>
 
 </resources>

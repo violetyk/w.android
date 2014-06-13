@@ -8,6 +8,12 @@
         revision="19.1.0"
         sha1="6b852a232f642c75a7fdfc7212b841b8c8f8959c"/>
     <item
+        dex="/Users/kagaya/works/w.android/app/build/intermediates/pre-dexed/debug/classes-2cf157ffd85acf3176ac8c67f9960ccec5ff9bd5.jar"
+        jar="/Users/kagaya/works/w.android/build/intermediates/exploded-aar/w.android/AndroidBootstrap/unspecified/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3913d5e8d8fbc1459fec6761c90a46e45256ea39"/>
+    <item
         dex="/Users/kagaya/works/w.android/app/build/intermediates/pre-dexed/debug/support-v4-19.1.0-fe930dc68beb1e566675ce71b270d4091c6c249b.jar"
         jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar"
         jumboMode="false"

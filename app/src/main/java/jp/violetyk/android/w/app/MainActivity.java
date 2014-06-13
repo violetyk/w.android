@@ -1,7 +1,9 @@
 package jp.violetyk.android.w.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
@@ -71,20 +73,36 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = this.getMenuInflater();
+        inflater.inflate(R.menu.actionbar_main_menu, menu);
+
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+//        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    // メニューが選択されたときに実行される
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.note_new:
+//                String name = ((TextView)findViewById(R.id.editTextName)).getText().toString();
+                Intent i = new Intent();
+                i.setClassName(this.getPackageName(), this.getPackageName() + ".EditActivity");
+//                i.putExtra("name", name);
+                startActivity(i);
+
+                return true;
+
+            case R.id.action_settings:
+                return true;
+
         }
+        
         return super.onOptionsItemSelected(item);
     }
 }
