@@ -1,7 +1,11 @@
 package jp.violetyk.android.w.app;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -9,16 +13,33 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
+import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
 
 
 public class MainActivity extends FragmentActivity {
+
+    // データベースヘルパーの作成
+    private DatabaseHelper helper = new DatabaseHelper(this);
+    // データベースの宣言
+    public static SQLiteDatabase db;
+
+    private static final String noteDir = "/notes";
+    private static final String extention = ".md";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        db = helper.getWritableDatabase();
+
+
 
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
 
@@ -93,9 +114,8 @@ public class MainActivity extends FragmentActivity {
 //                String name = ((TextView)findViewById(R.id.editTextName)).getText().toString();
                 Intent i = new Intent();
                 i.setClassName(this.getPackageName(), this.getPackageName() + ".EditActivity");
-//                i.putExtra("name", name);
+                i.putExtra("notePath", createNotePath());
                 startActivity(i);
-
                 return true;
 
             case R.id.action_settings:
@@ -105,4 +125,38 @@ public class MainActivity extends FragmentActivity {
         
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        helper.close();
+    }
+
+    private String createNotePath() {
+        File dir = new File(this.getFilesDir() + noteDir);
+        if (dir.exists() == false) {
+            dir.mkdirs();
+        }
+
+        return dir + "/" + createNoteName();
+    }
+
+    private String createNoteName() {
+        return String.format("%s%s_%s%s",
+                android.text.format.DateFormat.format("yyyyMMddkkmmss", Calendar.getInstance()).toString(),
+                random(9),
+                Build.DEVICE,
+                extention
+                );
+    }
+
+    private static String random(int length) {
+        Random generator = new Random();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i++){
+            sb.append(String.valueOf(generator.nextInt(10)));
+        }
+        return sb.toString();
+    }
+
 }
