@@ -16,6 +16,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class EditActivity extends Activity {
@@ -25,7 +28,12 @@ public class EditActivity extends Activity {
     // データベースの宣言
     public static SQLiteDatabase db;
 
-    private String notePath;
+    private String noteDir;
+    private String noteName;
+    private ArrayList<String> tags;
+
+
+    private static final String NOTITLE = "No Title";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +44,10 @@ public class EditActivity extends Activity {
 
         // インテントからファイルパスをもらう
         Intent intent = getIntent();
-        this.notePath = intent.getStringExtra("notePath");
-//        Toast.makeText(this, notePath, Toast.LENGTH_LONG).show();
+        this.noteDir = intent.getStringExtra("noteDir");
+        this.noteName = intent.getStringExtra("noteName");
 
         this.editNote();
-
     }
 
 
@@ -76,10 +83,11 @@ public class EditActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+
     private void editNote() {
         // テキストを読み込んでセット
         StringBuilder sb = new StringBuilder();
-        File f = new File(this.notePath);
+        File f = new File(this.noteDir + this.noteName);
         if (f.exists()) {
 
             try {
@@ -97,26 +105,65 @@ public class EditActivity extends Activity {
             }
         }
 
-        ((EditText)findViewById(R.id.edittext)).setText(sb.toString());
+        String text = sb.toString();
+        // 裏でタグデータを持っておく
+        this.tags = getTagsFromText(text);
+        ((EditText)findViewById(R.id.edittext)).setText(text);
     }
 
     private boolean saveNote() {
 
         try {
-            File file = new File(this.notePath);
+            File file = new File(this.noteDir + this.noteName);
             FileWriter filewriter = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(filewriter);
             PrintWriter pw = new PrintWriter(bw);
-            pw.write(((EditText)findViewById(R.id.edittext)).getText().toString());
-
+            String text = ((EditText)findViewById(R.id.edittext)).getText().toString();
+            pw.write(text);
             pw.close();
-            return true;
-            // DB にタイトルとタグを保存
+
+            ArrayList<String> oldTags = this.tags;
+            ArrayList<String> newTags = getTagsFromText(text);
+
+            if (helper.saveNote(db, this.noteName, getTitleFromText(text), newTags, oldTags)) {
+                this.tags = newTags;
+                return true;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
 
+    private String getTitleFromText(String text) {
+        String title = new String("");
+        String[] lines = text.split("\\r?\\n");
+        if (lines[0] != null) {
+            title = lines[0];
+        }
+        if (title.trim().length() == 0) {
+            return NOTITLE;
+        }
+        return title;
+    }
+
+    private ArrayList<String> getTagsFromText(String text) {
+        ArrayList<String> tags = new ArrayList<String>();
+
+        String[] lines = text.split("\\r?\\n");
+        if (lines.length >= 2 && lines[1] != null) {
+            String[] t = lines[1].split("(?<=\\])");
+            Pattern pattern = Pattern.compile("\\[(.+)\\]");
+            for (int i = 0; i < t.length; i++ ) {
+                Matcher matcher = pattern.matcher(t[i]);
+                while(matcher.find()){
+                    tags.add(matcher.group(1));
+                }
+            }
+
+        }
+        return tags;
+    }
 
 }

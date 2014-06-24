@@ -1,4 +1,4 @@
-BEGIN EXCLUSIVE;
+-- BEGIN EXCLUSIVE;
 
 DROP TABLE IF EXISTS "notes";
 CREATE TABLE "notes" (
@@ -25,4 +25,4 @@ CREATE VIRTUAL TABLE search_data USING fts4(
 );
 
 
-COMMIT;
+-- COMMIT;

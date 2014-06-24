@@ -1,10 +1,10 @@
 package jp.violetyk.android.w.app;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,12 +13,15 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
-import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Random;
 
 
@@ -32,14 +35,13 @@ public class MainActivity extends FragmentActivity {
     private static final String noteDir = "/notes";
     private static final String extention = ".md";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         db = helper.getWritableDatabase();
-
-
 
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
 
@@ -114,7 +116,8 @@ public class MainActivity extends FragmentActivity {
 //                String name = ((TextView)findViewById(R.id.editTextName)).getText().toString();
                 Intent i = new Intent();
                 i.setClassName(this.getPackageName(), this.getPackageName() + ".EditActivity");
-                i.putExtra("notePath", createNotePath());
+                i.putExtra("noteDir", getNoteDir());
+                i.putExtra("noteName", createNoteName());
                 startActivity(i);
                 return true;
 
@@ -132,13 +135,12 @@ public class MainActivity extends FragmentActivity {
         helper.close();
     }
 
-    private String createNotePath() {
+    private String getNoteDir() {
         File dir = new File(this.getFilesDir() + noteDir);
         if (dir.exists() == false) {
             dir.mkdirs();
         }
-
-        return dir + "/" + createNoteName();
+        return dir + "/";
     }
 
     private String createNoteName() {
