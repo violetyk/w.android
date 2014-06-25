@@ -16,5 +16,6 @@ public class PageItem {
     /** Fragment の種類. */
     public int fragmentKind;
     /** アプリケーションのリスト. */
-    public ArrayList<App> appList;
+//    public ArrayList<App> appList;
+    public ArrayList<Note> noteList;
 }

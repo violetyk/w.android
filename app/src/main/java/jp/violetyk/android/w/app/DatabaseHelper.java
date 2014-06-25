@@ -2,6 +2,7 @@ package jp.violetyk.android.w.app;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
@@ -50,6 +51,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //			onCreate(db);
     }
 
+    public ArrayList<Note> findMruNotes(SQLiteDatabase db, int limit) {
+        ArrayList<Note> noteList = new ArrayList<Note>();
+
+        try {
+            String[] args = {String.valueOf(limit)};
+            Cursor c = db.rawQuery("SELECT path, title FROM notes ORDER BY modified DESC LIMIT ?;", args);
+            while (c.moveToNext()) {
+                Note note = new Note();
+                note.path = c.getString(c.getColumnIndex("path"));
+                note.title = c.getString(c.getColumnIndex("title"));
+                noteList.add(note);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();;
+        }
+
+        return noteList;
+    }
     public boolean saveNote(SQLiteDatabase db, String path, String title, ArrayList<String> newTags, ArrayList<String> oldTags) {
 
         boolean isSuccess = false;

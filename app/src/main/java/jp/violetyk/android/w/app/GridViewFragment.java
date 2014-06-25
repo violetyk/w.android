@@ -27,8 +27,10 @@ public class GridViewFragment extends Fragment {
         }
 
         @SuppressWarnings("unchecked")
-        ArrayList<App> list = (ArrayList<App>) getArguments().get("list");
-        gridView.setAdapter(new AppListAdapter(getActivity(), R.layout.item_app, list));
+//        ArrayList<App> list = (ArrayList<App>) getArguments().get("list");
+//        gridView.setAdapter(new AppListAdapter(getActivity(), R.layout.item_app, list));
+        ArrayList<Note> list = (ArrayList<Note>) getArguments().get("list");
+        gridView.setAdapter(new NoteListAdapter(getActivity(), R.layout.item_note, list));
 
         return gridView;
     }

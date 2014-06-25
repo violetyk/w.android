@@ -34,7 +34,8 @@ public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
         GridViewFragment gridViewFragment = new GridViewFragment();
         // Bundle を作成
         Bundle bundle = new Bundle();
-        bundle.putSerializable("list", item.appList);
+//        bundle.putSerializable("list", item.appList);
+        bundle.putSerializable("list", item.noteList);
         gridViewFragment.setArguments(bundle);
         return gridViewFragment;
     }

@@ -58,36 +58,44 @@ public class MainActivity extends FragmentActivity {
         CustomFragmentPagerAdapter adapter = new CustomFragmentPagerAdapter(getSupportFragmentManager());
 
         // GridView の Adapter
-        ArrayList<App> appList = new ArrayList<App>();
-        for (int i = 0; i < 30; i++) {
-            App item = new App();
-            item.title = "App" + i;
-            item.description = "This app is " + i + ".";
-            item.company = "Company" + i;
-            item.rate = (float) Math.random() * 5;
-            item.value = (int) Math.floor((Math.random() * (500 - 80 + 1))) + 80;
-            appList.add(item);
-        }
+//        ArrayList<App> appList = new ArrayList<App>();
+//        for (int i = 0; i < 30; i++) {
+//            App item = new App();
+//            item.title = "App" + i;
+//            item.description = "This app is " + i + ".";
+//            item.company = "Company" + i;
+//            item.rate = (float) Math.random() * 5;
+//            item.value = (int) Math.floor((Math.random() * (500 - 80 + 1))) + 80;
+//            appList.add(item);
+//        }
 
         // 各ページアイテム(おすすめアプリ)
-        PageItem recommend = new PageItem();
-        recommend.title = "Recommend App";
-        recommend.fragmentKind = PageItem.RELATIVE;
-        adapter.addItem(recommend);
+//        PageItem recommend = new PageItem();
+//        recommend.title = "Recommend App";
+//        recommend.fragmentKind = PageItem.RELATIVE;
+//        adapter.addItem(recommend);
 
-        // 各ページアイテム(人気アプリ)
-        PageItem popular = new PageItem();
-        popular.title = "Popular App";
-        popular.fragmentKind = PageItem.GRID;
-        popular.appList = appList;
-        adapter.addItem(popular);
+        // 最近のノート
+        PageItem mru = new PageItem();
+        mru.title = "最近のノート";
+        mru.fragmentKind = PageItem.GRID;
+        mru.noteList = helper.findMruNotes(db, 30);
+        adapter.addItem(mru);
 
-        // 各ページアイテム(新着アプリ)
-        PageItem newest = new PageItem();
-        newest.title = "Newest App";
-        newest.fragmentKind = PageItem.GRID;
-        newest.appList = appList;
-        adapter.addItem(newest);
+
+//        // 各ページアイテム(人気アプリ)
+//        PageItem popular = new PageItem();
+//        popular.title = "Popular App";
+//        popular.fragmentKind = PageItem.GRID;
+//        popular.appList = appList;
+//        adapter.addItem(popular);
+//
+//        // 各ページアイテム(新着アプリ)
+//        PageItem newest = new PageItem();
+//        newest.title = "Newest App";
+//        newest.fragmentKind = PageItem.GRID;
+//        newest.appList = appList;
+//        adapter.addItem(newest);
 
         pager.setAdapter(adapter);
 
