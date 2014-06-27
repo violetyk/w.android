@@ -78,7 +78,7 @@ public class MainActivity extends FragmentActivity {
         // 最近のノート
         PageItem mru = new PageItem();
         mru.title = "最近のノート";
-        mru.fragmentKind = PageItem.GRID;
+        mru.fragmentType = PageItem.FRAGMENT_TYPE_LIST;
         mru.noteList = helper.findMruNotes(db, 30);
         adapter.addItem(mru);
 
@@ -143,7 +143,7 @@ public class MainActivity extends FragmentActivity {
         helper.close();
     }
 
-    private String getNoteDir() {
+    public String getNoteDir() {
         File dir = new File(this.getFilesDir() + noteDir);
         if (dir.exists() == false) {
             dir.mkdirs();
@@ -151,7 +151,7 @@ public class MainActivity extends FragmentActivity {
         return dir + "/";
     }
 
-    private String createNoteName() {
+    public String createNoteName() {
         return String.format("%s%s_%s%s",
                 android.text.format.DateFormat.format("yyyyMMddkkmmss", Calendar.getInstance()).toString(),
                 random(9),

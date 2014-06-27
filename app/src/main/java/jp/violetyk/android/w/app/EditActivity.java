@@ -1,12 +1,15 @@
 package jp.violetyk.android.w.app;
 
 import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -31,6 +34,8 @@ public class EditActivity extends Activity {
     private String noteDir;
     private String noteName;
     private ArrayList<String> tags;
+
+    private Application.ActivityLifecycleCallbacks activityLifecycleCallbacks;
 
 
     private static final String NOTITLE = "No Title";
@@ -96,7 +101,7 @@ public class EditActivity extends Activity {
 
                 String line;
                 while ((line = br.readLine()) != null) {
-                    sb.append(line);
+                    sb.append(line + "\n");
                 }
                 br.close();
                 fr.close();

@@ -6,16 +6,21 @@ import java.util.ArrayList;
  * ページのアイテム
  */
 public class PageItem {
-    /** GridView の Fragment の Id. */
-    public static final int GRID = 0;
-    /** RelativeLayout の Fragment の Id. */
-    public static final int RELATIVE = 1;
+    // GridViewで表示するページ
+    public static final int FRAGMENT_TYPE_GRID = 0;
 
-    /** ページ名. */
+    // Recommendレイアウトで表示するページ
+    public static final int FRAGMENT_TYPE_RECOMMEND = 1;
+
+    // ListViewで表示するページ
+    public static final int FRAGMENT_TYPE_LIST = 2;
+
+    // ページ名
     public String title;
-    /** Fragment の種類. */
-    public int fragmentKind;
-    /** アプリケーションのリスト. */
-//    public ArrayList<App> appList;
+
+    // ページを表示するときのフラグメントタイプ
+    public int fragmentType;
+
+    // ページのアイテムのリスト
     public ArrayList<Note> noteList;
 }

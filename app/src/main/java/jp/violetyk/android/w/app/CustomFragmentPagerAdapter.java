@@ -1,9 +1,11 @@
 package jp.violetyk.android.w.app;
 
+import android.app.ListFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -26,18 +28,27 @@ public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         PageItem item = mList.get(position);
-        if (PageItem.RELATIVE == item.fragmentKind) {
-            // RelativeLayout の Fragment
-            return new RecommendFragment();
+
+        Fragment fragment = null;
+        switch (item.fragmentType) {
+            case PageItem.FRAGMENT_TYPE_LIST:
+                fragment = new ListViewFragment();
+                break;
+
+            case PageItem.FRAGMENT_TYPE_GRID:
+                fragment = new GridViewFragment();
+                break;
+
+            case PageItem.FRAGMENT_TYPE_RECOMMEND:
+                fragment = new RecommendFragment();
+                break;
         }
-        // GridView の Fragment
-        GridViewFragment gridViewFragment = new GridViewFragment();
+
         // Bundle を作成
         Bundle bundle = new Bundle();
-//        bundle.putSerializable("list", item.appList);
         bundle.putSerializable("list", item.noteList);
-        gridViewFragment.setArguments(bundle);
-        return gridViewFragment;
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override

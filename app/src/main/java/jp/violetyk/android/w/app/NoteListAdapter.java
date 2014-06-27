@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.util.List;
@@ -27,7 +25,7 @@ public class NoteListAdapter extends ArrayAdapter<Note> {
         ViewHolder holder;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Service.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.item_note, parent, false);
+            convertView = inflater.inflate(R.layout.item_note_grid, parent, false);
             holder = new ViewHolder();
             holder.titleTextView = (TextView) convertView.findViewById(R.id.title_text_view);
             convertView.setTag(holder);
