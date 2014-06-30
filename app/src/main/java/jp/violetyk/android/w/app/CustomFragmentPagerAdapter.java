@@ -46,7 +46,7 @@ public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
 
         // Bundle を作成
         Bundle bundle = new Bundle();
-        bundle.putSerializable("list", item.noteList);
+        bundle.putSerializable("list", item.list);
         fragment.setArguments(bundle);
         return fragment;
     }

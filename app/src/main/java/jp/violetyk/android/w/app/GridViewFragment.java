@@ -26,9 +26,7 @@ public class GridViewFragment extends Fragment {
             gridView.setNumColumns(2);
         }
 
-        @SuppressWarnings("unchecked")
-        ArrayList<Note> list = (ArrayList<Note>) getArguments().get("list");
-        gridView.setAdapter(new NoteListAdapter(getActivity(), R.layout.item_note_grid, list));
+        gridView.setAdapter(new TagListAdapter(getActivity(), R.layout.item_tag_grid, (ArrayList)getArguments().get("list")));
 
         return gridView;
     }

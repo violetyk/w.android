@@ -6,12 +6,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -64,11 +66,90 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 noteList.add(note);
             }
         } catch (Exception e) {
-            e.printStackTrace();;
+            e.printStackTrace();
         }
 
         return noteList;
     }
+
+    public ArrayList<Tag> findAllTags(SQLiteDatabase db) {
+        ArrayList<Tag> tagList = new ArrayList<Tag>();
+
+        try {
+            Cursor c = db.rawQuery("SELECT name, note_count FROM tags ORDER BY name ASC;", null);
+
+            while (c.moveToNext()) {
+                Tag tag = new Tag();
+                tag.name = c.getString(c.getColumnIndex("name"));
+                tag.note_count = c.getString(c.getColumnIndex("note_count"));
+                tagList.add(tag);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return tagList;
+    }
+
+    public ArrayList<String> findMruTags(SQLiteDatabase db, int limit) {
+        ArrayList<String> tags = new ArrayList<String>();
+
+        try {
+            String[] args = {String.valueOf(limit)};
+            Cursor c = db.rawQuery("SELECT name FROM tags ORDER BY modified DESC LIMIT ?;", args);
+
+            while (c.moveToNext()) {
+                tags.add(c.getString(c.getColumnIndex("name")));
+            }
+
+       } catch (Exception e) {
+            e.printStackTrace();
+       }
+
+       return tags;
+    }
+
+    public ArrayList<Note> findMruNotesByTag(SQLiteDatabase db, String tag, int limit) {
+        ArrayList<Note> noteList = new ArrayList<Note>();
+
+        ArrayList<String> note_paths = new ArrayList<String>();
+
+        try {
+            String[] args1 = {tag, String.valueOf(limit)};
+            Cursor c1 = db.rawQuery("SELECT note_path FROM search_data WHERE tags MATCH ? LIMIT ?;", args1);
+            while (c1.moveToNext()) {
+                note_paths.add(c1.getString(c1.getColumnIndex("note_path")));
+            }
+
+            if (note_paths.size() > 0) {
+                // 配列の連結
+                String[] args2 = new String[note_paths.size() + 1];
+                String[] array1 = note_paths.toArray(new String[0]);
+                String[] array2 = {String.valueOf(limit)};
+                System.arraycopy(array1, 0, args2, 0, array1.length);
+                System.arraycopy(array2, 0, args2, array1.length, array2.length);
+
+//                TextUtils.join(",", note_paths.toArray()) +  String.valueOf(limit);
+
+                Cursor c2 = db.rawQuery("SELECT path, title FROM notes WHERE path IN (" + makePlaceholders(note_paths.size()) + ") ORDER BY modified DESC LIMIT ?;", args2);
+                while (c2.moveToNext()) {
+                    Note note = new Note();
+                    note.path = c2.getString(c2.getColumnIndex("path"));
+                    note.title = c2.getString(c2.getColumnIndex("title"));
+                    noteList.add(note);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return noteList;
+    }
+
+
+
     public boolean saveNote(SQLiteDatabase db, String path, String title, ArrayList<String> newTags, ArrayList<String> oldTags) {
 
         boolean isSuccess = false;
@@ -175,6 +256,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return sb.toString();
         } finally {
             if (br != null) br.close();
+        }
+    }
+
+    private String makePlaceholders(int len) {
+        if (len < 1) {
+            // It will lead to an invalid query anyway ..
+            throw new RuntimeException("No placeholders");
+        } else {
+            StringBuilder sb = new StringBuilder(len * 2 - 1);
+            sb.append("?");
+            for (int i = 1; i < len; i++) {
+                sb.append(",?");
+            }
+            return sb.toString();
         }
     }
 }

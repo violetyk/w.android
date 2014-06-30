@@ -12,28 +12,30 @@ import java.util.List;
 /**
  * Created by kagaya on 2014/06/03.
  */
-public class NoteListAdapter extends ArrayAdapter<Note> {
+public class TagListAdapter extends ArrayAdapter<Tag> {
 
-    public NoteListAdapter(Context context, int resource, List<Note> objects) {
+    public TagListAdapter(Context context, int resource, List<Tag> objects) {
         super(context, resource, objects);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Note item = getItem(position);
+        Tag item = getItem(position);
 
         ViewHolder holder;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Service.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.item_note_list, parent, false);
+            convertView = inflater.inflate(R.layout.item_tag_grid, parent, false);
             holder = new ViewHolder();
-            holder.titleTextView = (TextView) convertView.findViewById(R.id.title_text_view);
+            holder.nameTextView = (TextView) convertView.findViewById(R.id.name_text_view);
+            holder.noteCountTextView = (TextView) convertView.findViewById(R.id.note_count_text_view);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.titleTextView.setText(item.title);
+        holder.nameTextView.setText(item.name);
+        holder.noteCountTextView.setText(item.note_count);
 
         return convertView;
     }
@@ -43,7 +45,8 @@ public class NoteListAdapter extends ArrayAdapter<Note> {
      */
     private class ViewHolder {
 
-        public TextView titleTextView;
+        public TextView nameTextView;
+        public TextView noteCountTextView;
 
     }
 }

@@ -22,5 +22,5 @@ public class PageItem {
     public int fragmentType;
 
     // ページのアイテムのリスト
-    public ArrayList<Note> noteList;
+    public ArrayList list;
 }

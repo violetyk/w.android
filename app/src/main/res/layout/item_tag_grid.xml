@@ -22,13 +22,43 @@
         <!--android:text="App name"-->
         <!--/>-->
     <TextView
-        android:id="@+id/title_text_view"
+        android:id="@+id/name_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_alignParentTop="true"
-        android:text="ノートのタイトル"
+        android:text="タグのタイトル"
         />
+    <TextView
+        android:id="@+id/note_count_text_view_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="("
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/name_text_view"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+    <TextView
+        android:id="@+id/note_count_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/note_count_text_view_left"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentTop="true"
+        android:text="カウント"
+        />
+    <TextView
+        android:id="@+id/note_count_text_view_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=")"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/note_count_text_view"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
 
     <!--<TextView-->
         <!--android:id="@+id/company_text_view"-->
@@ -76,5 +106,7 @@
         android:layout_alignParentBottom="true"
         android:background="#333"
         />
+
+
 
 </RelativeLayout>

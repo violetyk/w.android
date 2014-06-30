@@ -79,23 +79,24 @@ public class MainActivity extends FragmentActivity {
         PageItem mru = new PageItem();
         mru.title = "最近のノート";
         mru.fragmentType = PageItem.FRAGMENT_TYPE_LIST;
-        mru.noteList = helper.findMruNotes(db, 30);
+        mru.list = helper.findMruNotes(db, 30);
         adapter.addItem(mru);
 
+        // タグ一覧
+        PageItem tags = new PageItem();
+        tags.title = "タグ一覧";
+        tags.fragmentType = PageItem.FRAGMENT_TYPE_GRID;
+        tags.list = helper.findAllTags(db);
+        adapter.addItem(tags);
 
-//        // 各ページアイテム(人気アプリ)
-//        PageItem popular = new PageItem();
-//        popular.title = "Popular App";
-//        popular.fragmentKind = PageItem.GRID;
-//        popular.appList = appList;
-//        adapter.addItem(popular);
-//
-//        // 各ページアイテム(新着アプリ)
-//        PageItem newest = new PageItem();
-//        newest.title = "Newest App";
-//        newest.fragmentKind = PageItem.GRID;
-//        newest.appList = appList;
-//        adapter.addItem(newest);
+        // 最近の使ったタグのノート
+        for (String tag : helper.findMruTags(db, 3)) {
+            PageItem mruTag = new PageItem();
+            mruTag.title = String.format("最近の[%s]", tag);
+            mruTag.fragmentType = PageItem.FRAGMENT_TYPE_LIST;
+            mruTag.list = helper.findMruNotesByTag(db, tag, 30);
+            adapter.addItem(mruTag);
+        }
 
         pager.setAdapter(adapter);
 
